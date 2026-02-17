@@ -7,7 +7,7 @@ import streamlit as st
 # UI/UX Configuration
 # -----------------------------------------
 st.set_page_config(
-    page_title="SIEM Rosetta | NL to Query",
+    page_title="SIEM Query Generator | NL to Query",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -35,8 +35,8 @@ st.markdown(
 # -----------------------------------------
 def initialize_ai(api_key: str) -> genai.GenerativeModel:
     genai.configure(api_key=api_key)
-    # Using gemini-1.5-pro for complex coding/logic tasks
-    return genai.GenerativeModel("gemini-1.5-pro")
+    # Using gemini-1.5-flash for complex coding/logic tasks
+    return genai.GenerativeModel("gemini-1.5-flash")
 
 
 def generate_siem_data(model: genai.GenerativeModel, nl_input: str, language: str) -> dict:
