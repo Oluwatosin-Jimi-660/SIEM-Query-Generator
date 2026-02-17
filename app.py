@@ -35,8 +35,20 @@ st.markdown(
 # -----------------------------------------
 def initialize_ai(api_key: str) -> genai.GenerativeModel:
     genai.configure(api_key=api_key)
-    # Using gemini-1.5-flash for complex coding/logic tasks
-    return genai.GenerativeModel("gemini-1.5-flash")
+
+    preferred_model = "gemini-1.5-flash"
+    try:
+        # Prefer a fast default, but fall back to any available text-generation model.
+        return genai.GenerativeModel(preferred_model)
+    except Exception:
+        available_models = [
+            model.name
+            for model in genai.list_models()
+            if "generateContent" in getattr(model, "supported_generation_methods", [])
+        ]
+        if not available_models:
+            raise
+        return genai.GenerativeModel(available_models[0])
 
 
 def generate_siem_data(model: genai.GenerativeModel, nl_input: str, language: str) -> dict:
@@ -78,7 +90,7 @@ def generate_siem_data(model: genai.GenerativeModel, nl_input: str, language: st
 # -----------------------------------------
 # Application Layout
 # -----------------------------------------
-st.title("🛡️ SIEM Rosetta")
+st.title("🛡️ SIEM Query Generator")
 st.markdown("Translate Natural Language to Guardrailed SIEM Queries.")
 
 # Sidebar Controls
