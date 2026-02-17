@@ -36,7 +36,7 @@ st.markdown(
 def initialize_ai(api_key: str) -> genai.GenerativeModel:
     genai.configure(api_key=api_key)
 
-    preferred_model = "gemini-1.5-flash"
+    preferred_model = "models/gemini-1.5-flash"
     try:
         # Prefer a fast default, but fall back to any available text-generation model.
         return genai.GenerativeModel(preferred_model)
